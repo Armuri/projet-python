@@ -1,4 +1,5 @@
 import pygame
+<<<<<<< Updated upstream
 from pygame.locals import QUIT, RESIZABLE
 
 pygame.init()
@@ -27,4 +28,34 @@ while column < 3:
 		cell_x += 100+10
 		column += 1
 
+=======
+from pygame.locals import*
+ 
+pygame.init()
+  
+#affichage de la fenêtre
+fen = pygame.display.set_mode((640, 480))
+pygame.display.set_caption("Chrono")
+fpsClock = pygame.time.Clock()
+ 
+TpsZero = pygame.time.get_ticks() ## Départ
+def temps():
+    seconds = (pygame.time.get_ticks() - TpsZero) / 1000
+    print(seconds)
+     
+continuer = True
+while continuer:
+    for evenement in pygame.event.get():
+        if evenement.type == QUIT:
+            continuer = False
+        if evenement.type == KEYDOWN:
+            if evenement.key == K_ESCAPE:
+                continuer = False
+                 
+    temps()
+     
+    pygame.display.flip()
+    fpsClock.tick(60)
+ 
+>>>>>>> Stashed changes
 pygame.quit()
