@@ -12,7 +12,7 @@ continuer = 1
 police = pygame.font.SysFont("Montserrat", 70)
 police1 = pygame.font.SysFont("Montserrat", 30)
 image_texte = police.render ("Blue Snake",2 , (45,85,255))
-image_texte1 = police1.render ("Score : 1",2 , (0,0,0))
+image_texte1 = police1.render ("Score : 0",2 , (0,0,0))
 
 while continuer:
     for event in pygame.event.get():
