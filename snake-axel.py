@@ -13,9 +13,12 @@ while continuer:
     fenetre.blit(fond, (0, 0))
 
     pygame.display.flip()
-cell_x = 10
-cell_y = 10
+#affichage de la fenêtre
+fen = pygame.display.set_mode((640, 480))
+pygame.display.set_caption("Chrono")
+fpsClock = pygame.time.Clock()
  
+<<<<<<< Updated upstream
 column = 0
 row = 0
  
@@ -38,6 +41,8 @@ fen = pygame.display.set_mode((640, 480))
 pygame.display.set_caption("Chrono")
 fpsClock = pygame.time.Clock()
  
+=======
+>>>>>>> Stashed changes
 TpsZero = pygame.time.get_ticks() ## Départ
 def temps():
     seconds = (pygame.time.get_ticks() - TpsZero) / 1000
@@ -56,6 +61,11 @@ while continuer:
      
     pygame.display.flip()
     fpsClock.tick(60)
+<<<<<<< Updated upstream
  
 >>>>>>> Stashed changes
 pygame.quit()
+=======
+    
+    pygame.quit()
+>>>>>>> Stashed changes
