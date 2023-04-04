@@ -7,12 +7,15 @@ pygame.init()
 
 # Définition des couleurs
 BLANC = (255, 255, 255)
-#NOIR = (0, 0, 0)
+NOIR = (0, 0, 0)
 ROUGE = (255, 0, 0)
 VERT = (0, 255, 0)
 BLEU = (0, 0, 255)
+AZUR = (0, 127, 255)
+GRIS = (96,96,96)
 
-
+#taille fenêtre game over
+taille = largeur, hauteur = 800, 600
 
 # Définition de la taille de la fenêtre
 TAILLE_ECRAN = (800, 600)
@@ -23,6 +26,8 @@ police = pygame.font.SysFont(None, 25)
 
 # Définition de la vitesse du serpent
 VITESSE = 10
+#VITESSE = 20
+#VITESSE = 30
 
 # Définition de la taille de la grille
 TAILLE_CASE = 25
@@ -56,7 +61,7 @@ def dessiner_grille():
 # Définition de la fonction pour dessiner le serpent
 def dessiner_serpent(corps):
     for pos in corps:
-        pygame.draw.rect(ecran, VERT, [pos[0], pos[1], TAILLE_CASE, TAILLE_CASE])
+        pygame.draw.rect(ecran, AZUR, [pos[0], pos[1], TAILLE_CASE, TAILLE_CASE])
 
 # Définition de la fonction pour dessiner la pomme
 def dessiner_pomme(position):
@@ -74,6 +79,38 @@ def afficher_temps(ecran):
     texte = font.render("Temps: " + str(temps_actuel // 1000) + "s", True, BLANC)
     ecran.blit(texte, (10, TAILLE_ECRAN[1] - 30))
 
+def game_over():
+    """Fonction permettant d'afficher l'écran de Game Over"""
+    #Le fond
+    ecran.fill(GRIS)
+    #Les rectangles
+    rect_again = pygame.draw.rect(ecran,ROUGE, [largeur-(largeur*0.85), hauteur-(hauteur*0.33), largeur/3.2, hauteur/10])
+    rect_quit = pygame.draw.rect(ecran, ROUGE, [largeur-(largeur*0.15+largeur/3.5), hauteur-(hauteur*0.33), largeur/3.2, hauteur/10])
+    contour_a = pygame.draw.rect(ecran, NOIR, [largeur-largeur*0.85, hauteur-hauteur*0.33, largeur/3.2, hauteur/10], 2)
+    contour_q = pygame.draw.rect(ecran, NOIR, [largeur-(largeur*0.15+largeur/3.5), hauteur-(hauteur*0.33), largeur/3.2, hauteur/10], 2)
+    #La police
+    pol_go = pygame.font.SysFont("Perpetua Titling MT", 130)
+    pol_buttons = pygame.font.SysFont("Perpetua Titling MT", 40)
+    #Les textes
+    txt_go = pol_go.render("GAME OVER", True, BLANC)
+    txt_again = pol_buttons.render("AGAIN", True, NOIR)
+    txt_quit = pol_buttons.render("QUIT", True, NOIR)
+    #Les positions
+    pos_go = txt_go.get_rect()
+    pos_again = txt_again.get_rect()
+    pos_quit = txt_quit.get_rect()
+    pos_go.centerx = ecran.get_rect().centerx
+    pos_again.centerx = largeur-largeur*0.7
+    pos_quit.centerx = largeur-(largeur*0.15+largeur/3.5) + largeur*0.16
+    pos_go.centery = hauteur*0.3
+    pos_again.centery = hauteur-(hauteur*0.28)
+    pos_quit.centery = pos_again.centery
+    #On colle sur la fenêtre
+    ecran.blit(txt_go, pos_go)
+    ecran.blit(txt_again, pos_again)
+    ecran.blit(txt_quit, pos_quit)
+
+
 # Définition de la fonction principale
 def jeu():
     # Initialisation du jeu
@@ -90,7 +127,8 @@ def jeu():
     serpent = [[TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2],
    [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE],
    [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*2],
-   [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*3]]
+   [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*3],
+   [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*4]]
     direction = DROITE
     # Fonction pour générer une nouvelle pomme
 
@@ -136,11 +174,12 @@ def jeu():
             nouvelle_tete[0] += TAILLE_CASE
 
         serpent.insert(0, nouvelle_tete)
-
+        
         # Gestion de la collision avec les bords
         if serpent[0][0] < 0 or serpent[0][0] >= TAILLE_ECRAN[0] or serpent[0][1] < 0 or serpent[0][1] >= TAILLE_ECRAN[1]:
-            pygame.quit()
-            quit()
+           pygame.quit()
+           quit()
+
 
         # Gestion de la collision avec le corps
         if serpent[0] in serpent[1:]:
