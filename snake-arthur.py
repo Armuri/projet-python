@@ -1,7 +1,12 @@
 import pygame
 import time
 import random
- 
+from tkinter import *
+from timeit import default_timer
+
+
+
+
 pygame.init()
  
 white = (255, 255, 255)
@@ -14,38 +19,39 @@ indigo = (75, 0, 130)
  
 dis_width = 800
 dis_height = 600
+vitesse = 10 
+ 
  
 dis = pygame.display.set_mode((dis_width, dis_height))
 pygame.display.set_caption('Snaak')
  
 clock = pygame.time.Clock()
-clock1 = pygame.time.get_ticks()
- 
+TEMPS_DEBUT= pygame.time.get_ticks()
+
 snake_block = 10
 snake_speed = 15
  
-font_style = pygame.font.SysFont("Avenir Next LT Pro", 25)
-score_font = pygame.font.SysFont("Avenir Next LT Pro", 35)
+font_style = pygame.font.SysFont("Arial", 25)
+score_font = pygame.font.SysFont("Arial", 35)
  
  
 def Your_score(score):
     value = score_font.render("Your Score: " + str(score), True, blue)
     dis.blit(value, [0, 0])
- 
-def Time(clock):
-    value2 = score_font.render("Time :" + str(clock), True, blue)
-    dis.blit(value2, [200, 0])
- 
- 
- 
+
 def our_snake(snake_block, snake_list):
     for x in snake_list:
         pygame.draw.rect(dis, blue, [x[0], x[1], snake_block, snake_block])
  
+def afficher_temps(ecran):
+    temps_actuel = pygame.time.get_ticks() - TEMPS_DEBUT
+    font = pygame.font.SysFont(None, 30)
+    texte = font.render("Temps: " + str(temps_actuel // 1000) + "s", True, blue)
+    ecran.blit(texte, (10, (dis_width,dis_height)[1] - 30))
  
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
-    dis.blit(mesg, [dis_width / 6, dis_height / 3])
+    dis.blit(mesg, [dis_width / 8, dis_height / 2])
  
  
 def gameLoop():
@@ -68,12 +74,10 @@ def gameLoop():
 
 
     while not game_over:
- 
         while game_close == True:
             dis.fill(white)
             message("R Retry or Q for Quit ", red)
-            Your_score(Length_of_snake - 1)
-            Time(clock1)
+            Your_score(Length_of_snake + 1)
             pygame.display.update()
  
             for event in pygame.event.get():
@@ -125,17 +129,19 @@ def gameLoop():
                 game_close = True
  
         our_snake(snake_block, snake_List)
-        Your_score(Length_of_snake - 1)
-        Time(clock1)
- 
+        Your_score(Length_of_snake + 1)
+        afficher_temps(dis)
+        
         pygame.display.update()
  
         if x1 == foodx and y1 == foody:
             foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
             foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
             Length_of_snake += 1
- 
-        clock.tick(snake_speed)
+            
+            
+        pygame.time.wait(100//vitesse)
+        clock.tick(snake_speed + 1)
  
     pygame.quit()
     quit()
