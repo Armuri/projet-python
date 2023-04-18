@@ -11,11 +11,8 @@ NOIR = (0, 0, 0)
 ROUGE = (255, 0, 0)
 VERT = (0, 255, 0)
 BLEU = (0, 0, 255)
-AZUR = (0, 127, 255)
-GRIS = (96,96,96)
 
-#taille fenêtre game over
-taille = largeur, hauteur = 800, 600
+
 
 # Définition de la taille de la fenêtre
 TAILLE_ECRAN = (800, 600)
@@ -26,8 +23,6 @@ police = pygame.font.SysFont(None, 25)
 
 # Définition de la vitesse du serpent
 VITESSE = 10
-#VITESSE = 20
-#VITESSE = 30
 
 # Définition de la taille de la grille
 TAILLE_CASE = 25
@@ -61,7 +56,7 @@ def dessiner_grille():
 # Définition de la fonction pour dessiner le serpent
 def dessiner_serpent(corps):
     for pos in corps:
-        pygame.draw.rect(ecran, AZUR, [pos[0], pos[1], TAILLE_CASE, TAILLE_CASE])
+        pygame.draw.rect(ecran, VERT, [pos[0], pos[1], TAILLE_CASE, TAILLE_CASE])
 
 # Définition de la fonction pour dessiner la pomme
 def dessiner_pomme(position):
@@ -79,36 +74,39 @@ def afficher_temps(ecran):
     texte = font.render("Temps: " + str(temps_actuel // 1000) + "s", True, BLANC)
     ecran.blit(texte, (10, TAILLE_ECRAN[1] - 30))
 
-def game_over():
-    """Fonction permettant d'afficher l'écran de Game Over"""
-    #Le fond
-    ecran.fill(GRIS)
-    #Les rectangles
-    rect_again = pygame.draw.rect(ecran,ROUGE, [largeur-(largeur*0.85), hauteur-(hauteur*0.33), largeur/3.2, hauteur/10])
-    rect_quit = pygame.draw.rect(ecran, ROUGE, [largeur-(largeur*0.15+largeur/3.5), hauteur-(hauteur*0.33), largeur/3.2, hauteur/10])
-    contour_a = pygame.draw.rect(ecran, NOIR, [largeur-largeur*0.85, hauteur-hauteur*0.33, largeur/3.2, hauteur/10], 2)
-    contour_q = pygame.draw.rect(ecran, NOIR, [largeur-(largeur*0.15+largeur/3.5), hauteur-(hauteur*0.33), largeur/3.2, hauteur/10], 2)
-    #La police
-    pol_go = pygame.font.SysFont("Perpetua Titling MT", 130)
-    pol_buttons = pygame.font.SysFont("Perpetua Titling MT", 40)
-    #Les textes
-    txt_go = pol_go.render("GAME OVER", True, BLANC)
-    txt_again = pol_buttons.render("AGAIN", True, NOIR)
-    txt_quit = pol_buttons.render("QUIT", True, NOIR)
-    #Les positions
-    pos_go = txt_go.get_rect()
-    pos_again = txt_again.get_rect()
-    pos_quit = txt_quit.get_rect()
-    pos_go.centerx = ecran.get_rect().centerx
-    pos_again.centerx = largeur-largeur*0.7
-    pos_quit.centerx = largeur-(largeur*0.15+largeur/3.5) + largeur*0.16
-    pos_go.centery = hauteur*0.3
-    pos_again.centery = hauteur-(hauteur*0.28)
-    pos_quit.centery = pos_again.centery
-    #On colle sur la fenêtre
-    ecran.blit(txt_go, pos_go)
-    ecran.blit(txt_again, pos_again)
-    ecran.blit(txt_quit, pos_quit)
+# Fonction pour afficher l'écran de fin de jeu
+def ecran_game_over(score, temps_ecoule):
+    # Effacer l'écran
+    ecran.fill(NOIR)
+
+    # Afficher le texte de fin de jeu
+    font_grand = pygame.font.SysFont(None, 40)
+    texte_score = font_grand.render("Score final: " + str(score), True, BLANC)
+    texte_temps = font_grand.render("Temps écoulé: " + str(int(temps_ecoule/1000)) + " secondes", True, BLANC)
+    texte_rejouer = font_grand.render("Appuyez sur 'ESPACE' pour rejouer", True, BLANC)
+    texte_quitter = font_grand.render("Appuyez sur 'Q' pour quitter", True, BLANC)
+    ecran.blit(texte_score, (TAILLE_ECRAN[0]/2 - texte_score.get_width()/2, TAILLE_ECRAN[1]/2 - texte_score.get_height() - 50))
+    ecran.blit(texte_temps, (TAILLE_ECRAN[0]/2 - texte_temps.get_width()/2, TAILLE_ECRAN[1]/2))
+    ecran.blit(texte_rejouer, (TAILLE_ECRAN[0]/2 - texte_rejouer.get_width()/2, TAILLE_ECRAN[1]/2 + texte_rejouer.get_height() + 50))
+    ecran.blit(texte_quitter, (TAILLE_ECRAN[0]/2 - texte_rejouer.get_width()/2, TAILLE_ECRAN[1]/2 + texte_quitter.get_height() + 90))
+
+    # Mettre à jour l'affichage
+    pygame.display.flip()
+
+     # Attendre que le joueur appuie sur la touche 'ESPACE' ou 'Q'
+    attente = True
+    while attente:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    attente = False
+                elif event.key == pygame.K_q:
+                    pygame.quit()
+                    SystemExit
+    
+    # Redémarrer le jeu
+    jeu()
+
 
 
 # Définition de la fonction principale
@@ -116,7 +114,7 @@ def jeu():
     # Initialisation du jeu
     pygame.init()
     ecran = pygame.display.set_mode(TAILLE_ECRAN)
-    pygame.display.set_caption("Snake")
+    pygame.display.set_caption("The Cosmic Snake")
     clock = pygame.time.Clock()
 
     #image de fond
@@ -127,9 +125,18 @@ def jeu():
     serpent = [[TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2],
    [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE],
    [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*2],
-   [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*3],
-   [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*4]]
+   [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*3]]
     direction = DROITE
+    
+    # Fonction pour finir le jeu
+    def fin_jeu():
+        # Calcul du temps écoulé depuis le début du jeu
+        temps_actuel = pygame.time.get_ticks()
+        temps_ecoule = temps_actuel - TEMPS_DEBUT
+
+        # Afficher l'écran de fin de jeu
+        ecran_game_over(score, temps_ecoule)
+    
     # Fonction pour générer une nouvelle pomme
 
     def generer_pomme(serpent):
@@ -174,17 +181,16 @@ def jeu():
             nouvelle_tete[0] += TAILLE_CASE
 
         serpent.insert(0, nouvelle_tete)
-        
+
         # Gestion de la collision avec les bords
         if serpent[0][0] < 0 or serpent[0][0] >= TAILLE_ECRAN[0] or serpent[0][1] < 0 or serpent[0][1] >= TAILLE_ECRAN[1]:
-           pygame.quit()
-           quit()
-
+           fin_jeu()
+           
 
         # Gestion de la collision avec le corps
         if serpent[0] in serpent[1:]:
-            pygame.quit()
-            quit()
+            fin_jeu()
+            
 
         # Gestion de la collision avec la pomme
         if serpent[0] == pomme:
@@ -192,6 +198,7 @@ def jeu():
             score += 10
         else:
             serpent.pop()
+    
 
         # Affichage des éléments
         ecran.blit(fond, (0, 0))
@@ -205,7 +212,6 @@ def jeu():
         # Attente avant de mettre à jour l'écran
         pygame.time.wait(1000//VITESSE)
 
-        
 
 # Lancement du jeu
 jeu()
