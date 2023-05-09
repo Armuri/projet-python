@@ -4,9 +4,6 @@ import random
 from tkinter import *
 from timeit import default_timer
 
-
-
-
 pygame.init()
  
 white = (255, 255, 255)
@@ -52,7 +49,6 @@ def afficher_temps(ecran):
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
     dis.blit(mesg, [dis_width / 8, dis_height / 2])
- 
  
 def gameLoop():
     game_over = False
@@ -145,6 +141,5 @@ def gameLoop():
  
     pygame.quit()
     quit()
- 
  
 gameLoop()
