@@ -15,29 +15,19 @@ BLEU = (0, 0, 255)
 
 
 # Définition de la taille de la fenêtre
-TAILLE_ECRAN = (800, 600)
+TAILLE_ECRAN = (1500, 750)
 ecran = pygame.display.set_mode(TAILLE_ECRAN)
 
 # Définition de la police d'écriture
 police = pygame.font.SysFont(None, 25)
 
 # Définition de la vitesse du serpent
-VITESSE = 10
+VITESSE = 150
 
 # Définition de la taille de la grille
 TAILLE_CASE = 25
 NB_COLONNES = TAILLE_ECRAN[0] // TAILLE_CASE
 NB_LIGNES = TAILLE_ECRAN[1] // TAILLE_CASE
-
-# Déclaration de la constante temps
-TEMPS_DEBUT = pygame.time.get_ticks()  # Temps écoulé depuis le début du jeu
-
-# Fonction pour afficher le temps
-def afficher_temps():
-    temps_actuel = pygame.time.get_ticks() - TEMPS_DEBUT
-    font = pygame.font.SysFont(None, 30)
-    texte = font.render("Temps: " + str(temps_actuel // 1000) + "s", True, BLANC)
-    ecran.blit(texte, (10, TAILLE_ECRAN[1] - 30))
 
 
 # Définition des directions possibles
@@ -45,6 +35,9 @@ HAUT = 0
 BAS = 1
 GAUCHE = 2
 DROITE = 3
+
+temps = 0
+endtime = 0
 
 # Définition de la fonction pour dessiner la grille
 def dessiner_grille():
@@ -68,21 +61,16 @@ def afficher_score(score):
     ecran.blit(texte, [0, 0])
 
 # Fonction pour afficher le temps
-def afficher_temps(ecran):
-    temps_actuel = pygame.time.get_ticks() - TEMPS_DEBUT
-    font = pygame.font.SysFont(None, 30)
-    texte = font.render("Temps: " + str(temps_actuel // 1000) + "s", True, BLANC)
-    ecran.blit(texte, (10, TAILLE_ECRAN[1] - 30))
 
 # Fonction pour afficher l'écran de fin de jeu
-def ecran_game_over(score, temps_ecoule):
+def ecran_game_over(score, temps_actuel):
     # Effacer l'écran
     ecran.fill(NOIR)
 
     # Afficher le texte de fin de jeu
     font_grand = pygame.font.SysFont(None, 40)
     texte_score = font_grand.render("Score final: " + str(score), True, BLANC)
-    texte_temps = font_grand.render("Temps écoulé: " + str(int(temps_ecoule/1000)) + " secondes", True, BLANC)
+    texte_temps = font_grand.render("Temps écoulé: " + str(temps_actuel) + " secondes", True, BLANC)
     texte_rejouer = font_grand.render("Appuyez sur 'ESPACE' pour rejouer", True, BLANC)
     texte_quitter = font_grand.render("Appuyez sur 'Q' pour quitter", True, BLANC)
     ecran.blit(texte_score, (TAILLE_ECRAN[0]/2 - texte_score.get_width()/2, TAILLE_ECRAN[1]/2 - texte_score.get_height() - 50))
@@ -115,7 +103,7 @@ def jeu():
     pygame.init()
     ecran = pygame.display.set_mode(TAILLE_ECRAN)
     pygame.display.set_caption("The Cosmic Snake")
-    clock = pygame.time.Clock()
+    
 
     #image de fond
     fond = pygame.image.load("Rimae_Sirsalis.jpg")
@@ -128,14 +116,23 @@ def jeu():
    [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*3]]
     direction = DROITE
     
+    temps = pygame.time.get_ticks()
+        
     # Fonction pour finir le jeu
     def fin_jeu():
         # Calcul du temps écoulé depuis le début du jeu
         temps_actuel = pygame.time.get_ticks()
-        temps_ecoule = temps_actuel - TEMPS_DEBUT
+        
 
         # Afficher l'écran de fin de jeu
-        ecran_game_over(score, temps_ecoule)
+        endtime = str((temps_actuel - temps)/ 1000);
+        ecran_game_over(score, endtime)
+        
+    def afficher_temps(ecran):
+        temps_actuel = pygame.time.get_ticks()
+        font = pygame.font.SysFont(None, 30)
+        texte = font.render("Temps: " + str((temps_actuel - temps)/ 1000) + "s", True, BLANC) 
+        ecran.blit(texte, (10, TAILLE_ECRAN[1] - 30))
     
     # Fonction pour générer une nouvelle pomme
 
@@ -167,7 +164,7 @@ def jeu():
                     direction = DROITE
 
          # Calcul du temps écoulé
-        temps_actuel = pygame.time.get_ticks() - TEMPS_DEBUT
+        afficher_temps(ecran)
 
         # Déplacement du serpent
         nouvelle_tete = [serpent[0][0], serpent[0][1]]
@@ -215,5 +212,3 @@ def jeu():
 
 # Lancement du jeu
 jeu()
-
-
