@@ -22,7 +22,7 @@ ecran = pygame.display.set_mode(TAILLE_ECRAN)
 police = pygame.font.SysFont(None, 25)
 
 # Définition de la vitesse du serpent
-VITESSE = 150
+VITESSE = 25
 
 # Définition de la taille de la grille
 TAILLE_CASE = 25
@@ -114,7 +114,7 @@ def jeu():
    [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE],
    [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*2],
    [TAILLE_ECRAN[0]//2, TAILLE_ECRAN[1]//2 + TAILLE_CASE*3]]
-    direction = DROITE
+    direction = GAUCHE
     
     temps = pygame.time.get_ticks()
         
@@ -135,15 +135,27 @@ def jeu():
         ecran.blit(texte, (10, TAILLE_ECRAN[1] - 30))
     
     # Fonction pour générer une nouvelle pomme
-
-    def generer_pomme(serpent):
-        pomme = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
     
-        # Vérification que la pomme n'apparaît pas sur le corps du serpent
-        while pomme in serpent:
-            pomme = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
-        return pomme
-    pomme = generer_pomme(serpent)
+    def generer_pomme1(serpent):
+        pomme1 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
+    
+        # Vérification que la pomme 1 n'apparaît pas sur le corps du serpent
+        while pomme1 in serpent:
+            pomme1 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
+        return pomme1
+    pomme1 = generer_pomme1(serpent)
+    
+    # Fonction pour générer une deuxième pomme
+    
+    def generer_pomme2(serpent):
+        pomme2 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
+    
+        # Vérification que la pomme 2 n'apparaît pas sur le corps du serpent
+        while pomme2 in serpent:
+            pomme2 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
+        return pomme2
+    pomme2 = generer_pomme2(serpent)
+    
     score = 0
     
     # Boucle de jeu
@@ -189,9 +201,12 @@ def jeu():
             fin_jeu()
             
 
-        # Gestion de la collision avec la pomme
-        if serpent[0] == pomme:
-            pomme = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
+        # Gestion de la collision avec la pomme 1 et 2
+        if serpent[0] == pomme1:
+            pomme1 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
+            score += 10
+        elif serpent[0] == pomme2:
+            pomme2 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
             score += 10
         else:
             serpent.pop()
@@ -199,9 +214,10 @@ def jeu():
 
         # Affichage des éléments
         ecran.blit(fond, (0, 0))
-        #dessiner_grille()
+        dessiner_grille()
         dessiner_serpent(serpent)
-        dessiner_pomme(pomme)
+        dessiner_pomme(pomme1)
+        dessiner_pomme(pomme2)
         afficher_score(score)
         afficher_temps(ecran)
         pygame.display.update()
