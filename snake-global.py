@@ -43,9 +43,9 @@ endtime = 0
 # Définition de la fonction pour dessiner la grille
 def dessiner_grille():
     for x in range(0, TAILLE_ECRAN[0], TAILLE_CASE):
-        pygame.draw.line(ecran, BLANC, (x,0), (x,TAILLE_ECRAN[1]))
+        pygame.draw.line(ecran, NOIR, (x,0), (x,TAILLE_ECRAN[1]))
     for y in range(0, TAILLE_ECRAN[1], TAILLE_CASE):
-        pygame.draw.line(ecran, BLANC, (0,y), (TAILLE_ECRAN[0],y))
+        pygame.draw.line(ecran, NOIR, (0,y), (TAILLE_ECRAN[0],y))
 
 # Définition de la fonction pour dessiner le serpent
 def dessiner_serpent(corps):
@@ -218,7 +218,7 @@ def jeu():
 
         # Affichage des éléments
         ecran.blit(fond, (0, 0))
-        #dessiner_grille()
+        dessiner_grille()
         dessiner_serpent(serpent)
         dessiner_pomme(pomme1)
         dessiner_pomme(pomme2)
