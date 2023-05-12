@@ -11,6 +11,7 @@ NOIR = (0, 0, 0)
 ROUGE = (255, 0, 0)
 VERT = (0, 255, 0)
 BLEU = (0, 0, 255)
+JAUNE = (255, 255, 0)
 
 
 
@@ -53,7 +54,7 @@ def dessiner_serpent(corps):
 
 # Définition de la fonction pour dessiner la pomme
 def dessiner_pomme(position):
-    pygame.draw.rect(ecran, ROUGE, [position[0], position[1], TAILLE_CASE, TAILLE_CASE])
+    pygame.draw.rect(ecran, JAUNE, [position[0], position[1], TAILLE_CASE, TAILLE_CASE])
 
 # Définition de la fonction pour afficher le score
 def afficher_score(score):
@@ -202,19 +203,22 @@ def jeu():
             
 
         # Gestion de la collision avec la pomme 1 et 2
+        VITESSE = 25
         if serpent[0] == pomme1:
             pomme1 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
             score += 10
+            VITESSE = VITESSE + 20
         elif serpent[0] == pomme2:
             pomme2 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
             score += 10
+            VITESSE = VITESSE + 20
         else:
             serpent.pop()
     
 
         # Affichage des éléments
         ecran.blit(fond, (0, 0))
-        dessiner_grille()
+        #dessiner_grille()
         dessiner_serpent(serpent)
         dessiner_pomme(pomme1)
         dessiner_pomme(pomme2)
