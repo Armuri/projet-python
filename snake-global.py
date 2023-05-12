@@ -107,7 +107,7 @@ def jeu():
     
 
     #image de fond
-    fond = pygame.image.load("Rimae_Sirsalis.jpg")
+    fond = pygame.image.load("fond_royal_v2.jpg")
     fond = pygame.transform.scale(fond, TAILLE_ECRAN)
 
     # Initialisation du serpent et de la pomme
