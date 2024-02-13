@@ -11,8 +11,10 @@ NOIR = (0, 0, 0)
 ROUGE = (255, 0, 0)
 VERT = (0, 255, 0)
 BLEU = (0, 0, 255)
+BLEUD = (0,191,255)
 JAUNE = (255, 255, 0)
-
+ORANGE = (255,125,0)
+Alice = (248,248,255)
 
 
 # Définition de la taille de la fenêtre
@@ -20,7 +22,7 @@ TAILLE_ECRAN = (1500, 750)
 ecran = pygame.display.set_mode(TAILLE_ECRAN)
 
 # Définition de la police d'écriture
-police = pygame.font.SysFont(None, 25)
+police = pygame.font.SysFont(None, 60)
 
 # Définition de la vitesse du serpent
 VITESSE = 25
@@ -50,7 +52,7 @@ def dessiner_grille():
 # Définition de la fonction pour dessiner le serpent
 def dessiner_serpent(corps):
     for pos in corps:
-        pygame.draw.rect(ecran, VERT, [pos[0], pos[1], TAILLE_CASE, TAILLE_CASE])
+        pygame.draw.rect(ecran, Alice, [pos[0], pos[1], TAILLE_CASE, TAILLE_CASE])
 
 # Définition de la fonction pour dessiner la pomme
 def dessiner_pomme(position):
@@ -59,7 +61,7 @@ def dessiner_pomme(position):
 # Définition de la fonction pour afficher le score
 def afficher_score(score):
     texte = police.render("Score: " + str(score), True, BLANC)
-    ecran.blit(texte, [0, 0])
+    ecran.blit(texte, [0,0 ])
 
 # Fonction pour afficher le temps
 
@@ -82,7 +84,8 @@ def ecran_game_over(score, temps_actuel):
     # Mettre à jour l'affichage
     pygame.display.flip()
 
-     # Attendre que le joueur appuie sur la touche 'ESPACE' ou 'Q'
+     # Attendre que le joueur appuie 
+     # sur la touche 'ESPACE' ou 'Q'
     attente = True
     while attente:
         for event in pygame.event.get():
@@ -203,15 +206,12 @@ def jeu():
             
 
         # Gestion de la collision avec la pomme 1 et 2
-        VITESSE = 25
         if serpent[0] == pomme1:
             pomme1 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
             score += 10
-            VITESSE = VITESSE + 20
         elif serpent[0] == pomme2:
             pomme2 = [random.randint(0, NB_COLONNES-1)*TAILLE_CASE, random.randint(0, NB_LIGNES-1)*TAILLE_CASE]
             score += 10
-            VITESSE = VITESSE + 20
         else:
             serpent.pop()
     
